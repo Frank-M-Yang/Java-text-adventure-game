@@ -18,7 +18,7 @@ public class Player {
     }
 
 
-    public boolean haschips(String direction){
+    public boolean hasChips(String direction){
         return collectedChips.contains(direction);
     }
 
@@ -33,7 +33,6 @@ public class Player {
 
     public void showStatus(){
         System.out.println("Player " + name + " has " + getChipsNumber() + " chips");
-        System.out.println("Health Points: " + health);
 
         if(!collectedChips.isEmpty()){
             System.out.println("You have Completed Directions:" +  collectedChips);

@@ -12,16 +12,15 @@ public class SphinxRiddleChallenge implements Challenge<String> {
     @Override
     public ChallengeResult<String> execute(Scanner scanner) {
         System.out.println("The Sphinx's Riddle:");
-        System.out.println("\"" + riddle + "\"\n");
+        System.out.println("\"" + riddle + "\"");
         System.out.print("Your answer: ");
         String answer = scanner.nextLine().trim().toLowerCase();
 
-        if (acceptableAnswers.stream().anyMatch(answer::contains)) {
-            return new ChallengeResult<>(true, answer,
-                    "The Sphinx falls silent...\nSphinx: \"...Correct. You may pass.\"");
+        boolean ok = acceptableAnswers.stream().anyMatch(answer::contains);
+        if (ok) {
+            return new ChallengeResult<>(true, answer, "Sphinx: \"Correct. You will get your chip!\"");
         } else {
-            return new ChallengeResult<>(false, answer,
-                    "Sphinx: \"Wrong! You shall be devoured!\"");
+            return new ChallengeResult<>(false, answer, "Sphinx: \"Wrong!\"");
         }
     }
 
@@ -35,3 +34,4 @@ public class SphinxRiddleChallenge implements Challenge<String> {
         return true;
     }
 }
+
