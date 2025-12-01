@@ -18,7 +18,7 @@ public class WordSearchChallenge implements Challenge<String> {
     };
 
     public void displayGrid() {
-        System.out.println("\n WORD MAZE CHALLENGE");
+        System.out.println("\n Word Search Challenge");
         System.out.println("A word is hidden in this alphabet maze!");
         System.out.println("Try to find it!\n");
 
@@ -50,7 +50,7 @@ public class WordSearchChallenge implements Challenge<String> {
 
     @Override
     public String getDescription() {
-        return "Word Maze Challenge";
+        return "Word Search Challenge";
     }
 
     @Override

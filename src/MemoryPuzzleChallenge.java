@@ -56,7 +56,7 @@ public class MemoryPuzzleChallenge implements Challenge<String> {
 
     @Override
     public boolean isCritical() {
-        return true;
+        return false;
     }
 
     private static class QuestionOption {

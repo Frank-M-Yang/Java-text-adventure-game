@@ -9,7 +9,7 @@ public class StorySegment {
     }
 
     public void showIntro() {
-        System.out.println("      Who Am I- Text Adventure Game");
+        System.out.println("Who Am I- Text Adventure Game");
 
         queueStory(new StoryLine(
                 "You wake up on a vast grassland...\nYour head is throbbing, and you have no memory of who you are or why you're here."));

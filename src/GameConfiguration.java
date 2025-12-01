@@ -4,6 +4,4 @@ public class GameConfiguration {
     public static final String DANGEROUS_DIRECTION = "South";
     public static final int MAX_HEALTH = 100;
 
-
-    private GameConfiguration() {}
 }
