@@ -1,3 +1,6 @@
+package game.core;
+import game.challenge.Challenge;
+
 public class Area<T> {
     private final String name;
     private final String description;

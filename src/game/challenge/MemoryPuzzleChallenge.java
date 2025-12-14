@@ -1,3 +1,5 @@
+package game.challenge;
+
 import java.util.*;
 
 public class MemoryPuzzleChallenge implements Challenge<String> {

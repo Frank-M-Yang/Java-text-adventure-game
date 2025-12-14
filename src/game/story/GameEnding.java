@@ -1,3 +1,5 @@
+package game.story;
+
 public enum GameEnding {
     DARK_LORD("The New Evil Mastermind", "You defeated the old doctor and became the new lord of evil"),
     REDEMPTION("Light of Redemption", "You chose justice and found your true self - you are Jackie Chan!Even though you are an android created to commit evil, you betrayed the darkness and walked towards the light."),

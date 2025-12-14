@@ -1,3 +1,5 @@
+package game.command;
+
 public class CommandParser {
     public static Command parse(String input) {
         if (input == null || input.trim().isEmpty()) {

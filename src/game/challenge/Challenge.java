@@ -1,3 +1,5 @@
+package game.challenge;
+
 import java.util.Scanner;
 
 public interface Challenge<T> {

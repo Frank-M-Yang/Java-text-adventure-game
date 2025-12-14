@@ -1,3 +1,5 @@
+package game.challenge;
+
 public class ChallengeResult<T> {
     private final boolean success;
     private final T data;

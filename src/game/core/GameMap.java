@@ -1,3 +1,6 @@
+package game.core;
+
+import game.challenge.*;
 import java.util.*;
 
 public class GameMap {
@@ -8,7 +11,7 @@ public class GameMap {
         areas.put("East", new Area<>("East", "Memory Maze", new MemoryPuzzleChallenge()));
         areas.put("West", new Area<>("West", "Word Search Game", new WordSearchChallenge()));
         areas.put("South", new Area<>("South", "Sphinx's Riddle", new SphinxRiddleChallenge()));
-        areas.put("North", new Area<>("North", "24 Points Challenge", new Math24Challenge()));
+        areas.put("North", new Area<>("North", "24 Points challenge.Challenge", new Math24Challenge()));
     }
 
     public Area<?> getArea(String direction) {

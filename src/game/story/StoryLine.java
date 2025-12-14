@@ -1,3 +1,5 @@
+package game.story;
+
 class StoryLine{
 
     private final String text;

@@ -1,3 +1,5 @@
+package game.model;
+
 public class MemoryFragment implements Comparable<MemoryFragment> {
     private final String id;
     private final String description;

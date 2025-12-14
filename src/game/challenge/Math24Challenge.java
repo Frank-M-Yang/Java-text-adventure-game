@@ -1,3 +1,5 @@
+package game.challenge;
+
 import java.util.Scanner;
 
 public class Math24Challenge implements Challenge<String> {
@@ -18,7 +20,7 @@ public class Math24Challenge implements Challenge<String> {
     }
 
     @Override
-    public String getDescription() { return "24 Points Challenge"; }
+    public String getDescription() { return "24 Points challenge.Challenge"; }
     @Override
     public boolean isCritical() { return false; }
 }

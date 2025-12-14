@@ -1,3 +1,5 @@
+package game.core;
+
 import java.util.*;
 
 public class Player {
@@ -32,7 +34,7 @@ public class Player {
     }
 
     public void showStatus(){
-        System.out.println("Player " + name + " has " + getChipsNumber() + " chips");
+        System.out.println("core.Player " + name + " has " + getChipsNumber() + " chips");
 
         if(!collectedChips.isEmpty()){
             System.out.println("You have Completed Directions:" +  collectedChips);

@@ -1,3 +1,5 @@
+package game.challenge;
+
 import java.util.Scanner;
 
 public class WordSearchChallenge implements Challenge<String> {
@@ -18,7 +20,7 @@ public class WordSearchChallenge implements Challenge<String> {
     };
 
     public void displayGrid() {
-        System.out.println("\n Word Search Challenge");
+        System.out.println("\n Word Search challenge.Challenge");
         System.out.println("A word is hidden in this alphabet maze!");
         System.out.println("Try to find it!\n");
 
@@ -50,7 +52,7 @@ public class WordSearchChallenge implements Challenge<String> {
 
     @Override
     public String getDescription() {
-        return "Word Search Challenge";
+        return "Word Search challenge.Challenge";
     }
 
     @Override

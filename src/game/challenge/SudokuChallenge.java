@@ -1,3 +1,5 @@
+package game.challenge;
+
 import java.util.*;
 
 public class SudokuChallenge implements Challenge<int[][]> {
@@ -10,7 +12,7 @@ public class SudokuChallenge implements Challenge<int[][]> {
 
     @Override
     public ChallengeResult<int[][]> execute(Scanner scanner) {
-        System.out.println("\nSudoku Challenge - Fill the 4x4 grid:");
+        System.out.println("\nSudoku challenge.Challenge - Fill the 4x4 grid:");
         displayBoard();
         System.out.println("\nEnter moves as: row col number (0-3, 1-4)");
         System.out.println("Type 'done' when finished");
