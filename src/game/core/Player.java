@@ -66,8 +66,4 @@ public class Player {
         return name;
     }
 
-    public boolean canChallenge(String direction) {
-        return !collectedChips.contains(direction);
-    }
-
 }

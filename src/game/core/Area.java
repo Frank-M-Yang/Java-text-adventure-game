@@ -29,10 +29,6 @@ public class Area<T> {
         this.chipCollected = false;
     }
 
-    public boolean canChallenge() {
-        return !chipCollected;
-    }
-
     public void enter() {
         System.out.println("You travel towards the " + name.toLowerCase() + "...");
         System.out.println(description);
