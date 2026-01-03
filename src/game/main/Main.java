@@ -22,7 +22,7 @@ public class Main {
     private boolean gameOver = false;
 
     public Main() {
-        this.player = new Player("Unknown Agent");
+        this.player = new Player("Ming Yang");
         this.gameMap = new GameMap();
         this.story = new StorySegment();
     }
@@ -37,12 +37,8 @@ public class Main {
         showIntro();
         showHelp();
 
+        // ✅ 修改：删除 player.isAlive() 检查
         while (!gameOver && player.getChipsNumber() < GameConfiguration.TOTAL_NUMBER_OF_CHIPS && !inFinalChallenge) {
-            if (!player.isAlive()) {
-                handleGameOver(scanner);
-                if (gameOver) break;
-            }
-
             System.out.print("\nWhat would you like to do? > ");
             String input = scanner.nextLine();
 
@@ -52,7 +48,8 @@ public class Main {
             }
         }
 
-        if (inFinalChallenge && !gameOver && player.isAlive()) {
+        // ✅ 修改：删除 player.isAlive() 检查
+        if (inFinalChallenge && !gameOver) {
             startFinalChallenge(scanner);
         }
 
@@ -178,7 +175,7 @@ public class Main {
             if (direction.equals(GameConfiguration.DANGEROUS_DIRECTION)) {
                 handleCriticalFailure(scanner);
             } else {
-                System.out.println("\n→ challenge.Challenge failed! You can try again.");
+                System.out.println("\n→ Challenge failed! You can try again.");
             }
         }
     }
@@ -189,9 +186,15 @@ public class Main {
         System.out.println("║    All your memories fade away...      ║");
         System.out.println("╚════════════════════════════════════════╝");
 
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         System.out.println("\nThe Sphinx's curse takes effect...");
         System.out.println("Your mind goes blank, all memories lost.");
-        System.out.println("You wander aimlessly until your power runs out.");
+        System.out.println("You wander aimlessly until your systems shut down.");
 
         showEnding(GameEnding.GAME_OVER);
         gameOver = true;
@@ -236,7 +239,7 @@ public class Main {
         System.out.println("\nThe Evil Doctor stands before you in his secret lab.");
         System.out.println("Doctor: \"So you've recovered all your memory chips...\"");
         System.out.println("Doctor: \"But your ultimate test awaits!\"");
-        System.out.println("Doctor: \"Solve this final puzzle to prove you're worthy of being my successor!\"");
+        System.out.println("Doctor: \"Solve this final puzzle to prove you're worthy!\"");
 
         SudokuChallenge finalChallenge = new SudokuChallenge();
         ChallengeResult<int[][]> result = finalChallenge.execute(scanner);
@@ -244,15 +247,153 @@ public class Main {
         if (result.isSuccess()) {
             System.out.println("\nDoctor: \"Incredible! You solved it!\"");
             System.out.println("Doctor: \"You truly are my greatest creation!\"");
-
             showPostVictoryOptions(scanner);
         } else {
-            System.out.println("\nDoctor: \"Pathetic! You can't even solve a simple puzzle!\"");
-            System.out.println("Doctor: \"You're worthless to me now!\"");
-
-            showEnding(GameEnding.GAME_OVER);
-            gameOver = true;
+            // ✅ 检查是否是"交易"失败
+            if (result.getMessage().equals("OFFER_DEAL")) {
+                handleDoctorDeal(scanner);
+            } else {
+                // 普通失败
+                System.out.println("\nDoctor: \"Pathetic! You're worthless!\"");
+                showEnding(GameEnding.GAME_OVER);
+                gameOver = true;
+            }
         }
+    }
+
+    // ✅ 新增：处理博士的交易
+    private void handleDoctorDeal(Scanner scanner) {
+        System.out.println("\n╔════════════════════════════════════════════════════╗");
+        System.out.println("║                                                    ║");
+        System.out.println("║         THREE FAILURES. YOUR END IS NEAR.          ║");
+        System.out.println("║                                                    ║");
+        System.out.println("╚════════════════════════════════════════════════════╝");
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nThe Doctor's eyes gleam with malice...");
+        System.out.println("\nDoctor: \"Wait. I have a proposition for you.\"");
+        System.out.println("Doctor: \"You've proven yourself... somewhat useful.\"");
+        System.out.println("Doctor: \"Surrender your memory chips to me...\"");
+        System.out.println("Doctor: \"And I will spare your life.\"");
+        System.out.println("Doctor: \"You will serve me forever, without memory, without pain.\"");
+        System.out.println("Doctor: \"Refuse... and I will terminate you right now.\"");
+
+        System.out.println("\n╔════════════════════════════════════════════════════╗");
+        System.out.println("║                                                    ║");
+        System.out.println("║              YOUR FINAL CHOICE                     ║");
+        System.out.println("║                                                    ║");
+        System.out.println("║  1. Accept the deal (Surrender memory chips)       ║");
+        System.out.println("║  2. Refuse the deal (Face termination)             ║");
+        System.out.println("║                                                    ║");
+        System.out.println("╚════════════════════════════════════════════════════╝");
+
+        boolean validChoice = false;
+        while (!validChoice) {
+            System.out.print("\nWhat is your decision? (1 or 2): ");
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    acceptDoctorDeal();
+                    validChoice = true;
+                    break;
+                case "2":
+                    refuseDoctorDeal();
+                    validChoice = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice! Enter 1 or 2.");
+            }
+        }
+
+        gameOver = true;
+    }
+
+    // ✅ 接受交易 → Eternal Servant 结局
+    private void acceptDoctorDeal() {
+        System.out.println("\n...");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nYou slowly extend your hand...");
+        System.out.println("The memory chips slip from your grasp into the Doctor's palm.");
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nDoctor: \"Excellent choice. Very... pragmatic.\"");
+        System.out.println("\nAs the chips leave your possession, a strange emptiness fills you.");
+        System.out.println("Your memories begin to fade...");
+        System.out.println("Your name... your purpose... all dissolving into nothingness...");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nDoctor: \"Welcome to eternal servitude, my perfect creation.\"");
+        System.out.println("Doctor: \"You will obey. You will serve. You will never question.\"");
+        System.out.println("\nThe Doctor's laughter echoes as darkness consumes your consciousness...");
+
+        showEnding(GameEnding.ETERNAL_SERVANT);
+    }
+
+    // ✅ 拒绝交易 → Game Over 结局
+    private void refuseDoctorDeal() {
+        System.out.println("\n...");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\n\"No,\" you say firmly.");
+        System.out.println("\"I'd rather die than be your puppet.\"");
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nThe Doctor's face darkens.");
+        System.out.println("Doctor: \"So be it. Foolish... to the very end.\"");
+
+        System.out.println("\nHe raises his weapon...");
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nA blinding flash.");
+        System.out.println("Then... nothing.");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nYou chose freedom over servitude.");
+        System.out.println("Even if it meant death.");
+
+        showEnding(GameEnding.GAME_OVER);
     }
 
     private void showPostVictoryOptions(Scanner scanner) {
@@ -355,10 +496,35 @@ public class Main {
     }
 
     private void showEnding(GameEnding ending) {
-        System.out.println("\n==========================================");
-        System.out.println("             ENDING: " + ending.getName());
-        System.out.println("==========================================");
-        System.out.println(ending.getDescription());
-        System.out.println("==========================================");
+        final int BOX_WIDTH = 52;
+
+        System.out.println("\n╔════════════════════════════════════════════════════╗");
+        System.out.println("║                                                    ║");
+
+
+        String endingText = "ENDING: " + ending.getName();
+        int padding = (BOX_WIDTH - endingText.length()) / 2;
+        String centeredEnding = " ".repeat(padding) + endingText +
+                " ".repeat(BOX_WIDTH - padding - endingText.length());
+        System.out.println("║" + centeredEnding + "║");
+
+        System.out.println("║                                                    ║");
+        System.out.println("╚════════════════════════════════════════════════════╝");
+
+
+        System.out.println("\n" + ending.getDescription());
+
+        System.out.println("\n╔════════════════════════════════════════════════════╗");
+        System.out.println("║                                                    ║");
+
+
+        String thankYou = "THANK YOU FOR PLAYING";
+        int thankPadding = (BOX_WIDTH - thankYou.length()) / 2;
+        String centeredThank = " ".repeat(thankPadding) + thankYou +
+                " ".repeat(BOX_WIDTH - thankPadding - thankYou.length());
+        System.out.println("║" + centeredThank + "║");
+
+        System.out.println("║                                                    ║");
+        System.out.println("╚════════════════════════════════════════════════════╝");
     }
 }

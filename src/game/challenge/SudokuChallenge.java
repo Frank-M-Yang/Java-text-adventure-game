@@ -1,18 +1,12 @@
 package game.challenge;
 
 import java.util.*;
+import game.core.GameConfiguration;
 
-/**
- * Final BOSS Challenge.
- * The player must solve a 4x4 Sudoku puzzle.
- * The player has at most THREE attempts.
- * Any mistake immediately fails the current attempt.
- * After three failures, the challenge returns a critical failure.
- */
 public class SudokuChallenge implements Challenge<int[][]> {
 
-    private static final int SIZE = 4;
-    private static final int MAX_ATTEMPTS = 3;
+    private static final int SIZE = GameConfiguration.SUDOKU_SIZE;
+    private static final int MAX_ATTEMPTS = GameConfiguration.SUDOKU_MAX_ATTEMPTS;
 
     private final int[][] solution = {
             {1, 2, 3, 4},
@@ -29,6 +23,7 @@ public class SudokuChallenge implements Challenge<int[][]> {
     };
 
     private final List<int[]> emptyCells = new ArrayList<>();
+    private int failedAttempts = 0;
 
     public SudokuChallenge() {
         for (int i = 0; i < SIZE; i++) {
@@ -42,7 +37,6 @@ public class SudokuChallenge implements Challenge<int[][]> {
 
     @Override
     public ChallengeResult<int[][]> execute(Scanner scanner) {
-
         printIntro();
 
         for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -60,6 +54,8 @@ public class SudokuChallenge implements Challenge<int[][]> {
                 );
             }
 
+            failedAttempts++;
+
             if (attempt < MAX_ATTEMPTS) {
                 System.out.println(
                         "Evil Doctor: \"Pathetic. Try again, if you dare.\""
@@ -67,18 +63,19 @@ public class SudokuChallenge implements Challenge<int[][]> {
             }
         }
 
-        // After three failed attempts → critical failure
+        // After 3 attempts
         return new ChallengeResult<>(
                 false,
                 puzzle,
-                "Evil Doctor: \"Enough. Your journey ends here.\""
+                "OFFER_DEAL"
         );
     }
 
-    /**
-     * Plays a single Sudoku attempt.
-     * Any invalid input or rule violation immediately fails the attempt.
-     */
+    // How many failed attempts
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
     private boolean playSingleAttempt(Scanner scanner) {
         int[][] board = deepCopy(puzzle);
         int step = 0;
@@ -86,7 +83,7 @@ public class SudokuChallenge implements Challenge<int[][]> {
         while (step < emptyCells.size()) {
             displayBoard(board);
 
-            System.out.print("Enter the number for the next empty cell (1-4): ");
+            System.out.print("Enter number for next empty cell (1-4): ");
             String input = scanner.nextLine().trim();
 
             try {
@@ -129,36 +126,43 @@ public class SudokuChallenge implements Challenge<int[][]> {
         System.out.println("Evil Doctor: \"Yet... you survived everything.\"");
         System.out.println();
         System.out.println("Evil Doctor: \"Very well. This is our final duel.\"");
-        System.out.println("Evil Doctor: \"Fail three times... and this facility will be your grave.\"");
+        System.out.println("Evil Doctor: \"Fail three times... and face the consequences.\"");
         System.out.println("=====================================\n");
 
         System.out.println("Final Trial: Sequential Sudoku");
-        System.out.println("- Fill the empty cells in order");
-        System.out.println("- Numbers range from 1 to 4");
-        System.out.println("- One mistake ends the attempt\n");
+        System.out.println("- Fill empty cells in order (left to right, top to bottom)");
+        System.out.println("- Numbers: 1 to 4");
+        System.out.println("- One mistake = attempt failed\n");
     }
 
     private void displayBoard(int[][] board) {
-        System.out.println("╔═══════╦═══════╗");
+        System.out.println("\n  ┌───┬───┐───┬───┐");
 
         for (int i = 0; i < SIZE; i++) {
-            System.out.print("║ ");
+            System.out.print(i + " │");
 
             for (int j = 0; j < SIZE; j++) {
-                String cell = board[i][j] == 0 ? "?" : String.valueOf(board[i][j]);
-                System.out.print(cell + " ");
+                String cell = board[i][j] == 0 ? " ? " : " " + board[i][j] + " ";
+                System.out.print(cell);
 
-                if (j == 1) System.out.print("║ ");
+                if (j == 1) {
+                    System.out.print("│");
+                } else if (j < SIZE - 1) {
+                    System.out.print("│");
+                }
             }
 
-            System.out.println("║");
+            System.out.println("│");
 
             if (i == 1) {
-                System.out.println("╠═══════╬═══════╣");
+                System.out.println("  ├───┼───┤───┼───┤");
+            } else if (i < SIZE - 1) {
+                System.out.println("  ├───┼───┼───┼───┤");
             }
         }
 
-        System.out.println("╚═══════╩═══════╝\n");
+        System.out.println("  └───┴───┘───┴───┘");
+        System.out.println("    0   1   2   3\n");
     }
 
     private boolean isValidMove(int[][] board, int row, int col, int num) {
