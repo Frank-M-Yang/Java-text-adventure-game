@@ -3,11 +3,28 @@ package game.challenge;
 import java.util.*;
 import game.core.GameConfiguration;
 
+/**
+ * Final BOSS challenge: 4x4 sequential Sudoku puzzle.
+ * Player must fill empty cells in order with numbers 1-4.
+ * Maximum 3 attempts; after 3 failures, Doctor offers a deal.
+ *
+ * Design: Contains validation logic for self-contained gameplay.
+ * Testing logic is in game.logic.SudokuLogic for unit testing.
+ *
+ * @author Ming Yang
+ * @see game.logic.SudokuLogic
+ * @see GameConfiguration#SUDOKU_SIZE
+ * @see GameConfiguration#SUDOKU_MAX_ATTEMPTS
+ */
 public class SudokuChallenge implements Challenge<int[][]> {
 
+    /** Grid size (4x4) from configuration */
     private static final int SIZE = GameConfiguration.SUDOKU_SIZE;
+
+    /** Maximum attempts allowed (3) */
     private static final int MAX_ATTEMPTS = GameConfiguration.SUDOKU_MAX_ATTEMPTS;
 
+    /** Complete solution grid */
     private final int[][] solution = {
             {1, 2, 3, 4},
             {4, 3, 2, 1},
@@ -15,6 +32,7 @@ public class SudokuChallenge implements Challenge<int[][]> {
             {3, 4, 1, 2}
     };
 
+    /** Initial puzzle (0 = empty cell) */
     private final int[][] puzzle = {
             {1, 0, 3, 0},
             {0, 3, 0, 1},
@@ -22,9 +40,15 @@ public class SudokuChallenge implements Challenge<int[][]> {
             {3, 0, 1, 0}
     };
 
+    /** Coordinates of empty cells in reading order */
     private final List<int[]> emptyCells = new ArrayList<>();
+
+    /** Count of failed attempts */
     private int failedAttempts = 0;
 
+    /**
+     * Constructs challenge and identifies all empty cells.
+     */
     public SudokuChallenge() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -35,13 +59,20 @@ public class SudokuChallenge implements Challenge<int[][]> {
         }
     }
 
+    /**
+     * Executes the Sudoku challenge with up to 3 attempts.
+     *
+     * @param scanner For player input
+     * @return ChallengeResult with success/failure outcome
+     */
     @Override
     public ChallengeResult<int[][]> execute(Scanner scanner) {
         printIntro();
 
         for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
             System.out.println(
-                    "\nEvil Doctor: \"Attempt " + attempt + " of " + MAX_ATTEMPTS + ". Do not disappoint me.\""
+                    "\nEvil Doctor: \"Attempt " + attempt + " of " + MAX_ATTEMPTS +
+                            ". Do not disappoint me.\""
             );
 
             boolean success = playSingleAttempt(scanner);
@@ -63,19 +94,25 @@ public class SudokuChallenge implements Challenge<int[][]> {
             }
         }
 
-        // After 3 attempts
         return new ChallengeResult<>(
                 false,
                 puzzle,
-                "OFFER_DEAL"
+                "OFFER_DEAL"  // Triggers special handling in Main
         );
     }
 
-    // How many failed attempts
+    /** @return Count of failed attempts */
     public int getFailedAttempts() {
         return failedAttempts;
     }
 
+    /**
+     * Executes a single Sudoku attempt.
+     * Any mistake (invalid input or rule violation) fails the attempt immediately.
+     *
+     * @param scanner For player input
+     * @return true if puzzle solved correctly
+     */
     private boolean playSingleAttempt(Scanner scanner) {
         int[][] board = deepCopy(puzzle);
         int step = 0;
@@ -83,7 +120,14 @@ public class SudokuChallenge implements Challenge<int[][]> {
         while (step < emptyCells.size()) {
             displayBoard(board);
 
-            System.out.print("Enter number for next empty cell (1-4): ");
+            // Explicitly tell the player which cell is being filled
+            int row = emptyCells.get(step)[0];
+            int col = emptyCells.get(step)[1];
+
+            System.out.print(
+                    "Enter number for cell [row " + row + ", col " + col + "] (1-4): "
+            );
+
             String input = scanner.nextLine().trim();
 
             try {
@@ -95,9 +139,6 @@ public class SudokuChallenge implements Challenge<int[][]> {
                     );
                     return false;
                 }
-
-                int row = emptyCells.get(step)[0];
-                int col = emptyCells.get(step)[1];
 
                 if (!isValidMove(board, row, col, num)) {
                     System.out.println(
@@ -120,6 +161,7 @@ public class SudokuChallenge implements Challenge<int[][]> {
         return Arrays.deepEquals(board, solution);
     }
 
+    /** Displays challenge introduction and rules */
     private void printIntro() {
         System.out.println("\n=====================================");
         System.out.println("Evil Doctor: \"You should not be here.\"");
@@ -135,6 +177,11 @@ public class SudokuChallenge implements Challenge<int[][]> {
         System.out.println("- One mistake = attempt failed\n");
     }
 
+    /**
+     * Displays formatted Sudoku board with row/column numbers.
+     *
+     * @param board Current board state
+     */
     private void displayBoard(int[][] board) {
         System.out.println("\n  ┌───┬───┐───┬───┐");
 
@@ -165,6 +212,15 @@ public class SudokuChallenge implements Challenge<int[][]> {
         System.out.println("    0   1   2   3\n");
     }
 
+    /**
+     * Validates Sudoku move against row, column, and 2x2 box rules.
+     *
+     * @param board Current board
+     * @param row Target row (0-3)
+     * @param col Target column (0-3)
+     * @param num Number to place (1-4)
+     * @return true if move is valid
+     */
     private boolean isValidMove(int[][] board, int row, int col, int num) {
         for (int i = 0; i < SIZE; i++) {
             if (board[row][i] == num || board[i][col] == num) {
@@ -183,6 +239,7 @@ public class SudokuChallenge implements Challenge<int[][]> {
         return true;
     }
 
+    /** Creates deep copy of 2D array */
     private int[][] deepCopy(int[][] src) {
         int[][] copy = new int[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
@@ -191,11 +248,13 @@ public class SudokuChallenge implements Challenge<int[][]> {
         return copy;
     }
 
+    /** @return "Final Boss: Evil Doctor" */
     @Override
     public String getDescription() {
         return "Final Boss: Evil Doctor";
     }
 
+    /** @return true (this is a critical challenge) */
     @Override
     public boolean isCritical() {
         return true;
